@@ -1,0 +1,9 @@
+app:
+  build: .
+  volumes:
+    - '$DOCKER_CERT_PATH:/certs'
+    - '.:/bowerpkg'
+  environment:
+    - DOCKER_HOST
+    - DOCKER_TLS_VERIFY
+    - DOCKER_CERT_PATH=/certs

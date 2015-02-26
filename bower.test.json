@@ -1,0 +1,6 @@
+{
+  "name": "test",
+  "dependencies": {
+    "bowser": "0.7.2"
+  }
+}

@@ -39,4 +39,4 @@ def process_bower_json():
 def get_store(path):
     return static_file(path, root='/store')
 
-run(app, host='localhost', port=3000, server='gevent')
+run(app, host='0.0.0.0', port=3000, server='gevent')

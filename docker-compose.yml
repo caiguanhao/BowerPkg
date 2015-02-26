@@ -1,5 +1,12 @@
+store:
+  image: busybox
+  volumes:
+    - '/store'
+
 app:
   build: .
+  volumes_from:
+    - store
   volumes:
     - '$DOCKER_CERT_PATH:/certs'
     - '.:/bowerpkg'

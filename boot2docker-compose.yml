@@ -1,0 +1,16 @@
+store:
+  image: busybox
+  volumes:
+    - '/store'
+
+app:
+  build: .
+  volumes_from:
+    - store
+  volumes:
+    - '$DOCKER_CERT_PATH:/certs'
+    - '.:/bowerpkg'
+  environment:
+    - DOCKER_HOST
+    - DOCKER_TLS_VERIFY
+    - DOCKER_CERT_PATH=/certs

@@ -30,8 +30,11 @@ CMD env
 
     def __init__(self, store='/store'):
         kwargs = kwargs_from_env()
-        kwargs['tls'].assert_hostname = False
-        self.client = Client(**kwargs)
+        if 'tls' in kwargs:
+            kwargs['tls'].assert_hostname = False
+            self.client = Client(**kwargs)
+        else:
+            self.client = Client(base_url='unix://var/run/docker.sock')
         self.STORE = store
 
     def image_exists(self, img_name, img_ver='latest'):

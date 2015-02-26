@@ -51,7 +51,7 @@ CMD env
         build = self.client.build(fileobj=fileobj, rm=True, tag=tag)
         for line in build:
             out = loads(line)['stream']
-            sys.stdout.write(out)
+            sys.stdout.write(out.encode('utf-8'))
 
     def mkdirs(self, path):
         try:
@@ -100,8 +100,9 @@ CMD env
             )
             with open(logpath, 'w') as fd:
                 for line in logs:
-                    sys.stdout.write(line)
-                    fd.write(line)
+                    uline = line.encode('utf-8')
+                    sys.stdout.write(uline)
+                    fd.write(uline)
             exit = self.client.wait(
                 container=cid,
             )

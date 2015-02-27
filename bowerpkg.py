@@ -4,6 +4,7 @@ import base64
 import shutil
 import tarfile
 import hashlib
+import traceback
 
 from io import BytesIO
 from docker.client import Client
@@ -71,12 +72,13 @@ CMD env
         shasum = hashlib.sha1(bower_json).hexdigest()
         b64 = base64.b64encode(bower_json)
         path = '%s/%s' % (self.STORE, shasum)
+        failpath = '%s/fail/%s' % (self.STORE, shasum)
         jsonpath = '%s/%s' % (path, 'bower.json')
         pkgpath = '%s/%s' % (path, 'bowerpkg.tar.gz')
         logpath = '%s/%s' % (path, 'log')
         self.mkdirs(path)
         with open(jsonpath, 'w') as fd:
-            fd.write(bower_json)
+            fd.write(bower_json.encode('utf-8'))
 
         env = {"BOWERJSON": b64}
         bower_install_opts = [
@@ -106,13 +108,12 @@ CMD env
             )
             with open(logpath, 'w') as fd:
                 for line in logs:
-                    uline = line.encode('utf-8')
-                    sys.stdout.write(uline)
-                    fd.write(uline)
+                    sys.stdout.write(line)
+                    fd.write(line)
             exit = self.client.wait(
                 container=cid,
             )
-            if exit != 0: raise exit
+            if exit != 0: raise Exception('container %s exited (%d)' % (cid, exit))
             res = self.client.copy(
                 container=cid,
                 resource='/bower/bowerpkg.tar.gz',
@@ -122,7 +123,13 @@ CMD env
             tar.close()
             return pkgpath
         except:
-            shutil.rmtree(path)
+            try:
+                err = traceback.format_exc()
+                with open(logpath, 'a') as fd:
+                    fd.write(str(err))
+                shutil.rmtree(failpath)
+            except: pass
+            shutil.move(path, failpath)
         finally:
             self.client.remove_container(
                 container=cid,

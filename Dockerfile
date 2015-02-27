@@ -10,6 +10,6 @@ RUN pip install -r requirements.txt;
 
 EXPOSE 3000
 
-CMD python server.py
+CMD bottle.py --bind 0.0.0.0:3000 --server gevent server:app
 
 ADD . /bowerpkg

@@ -2,8 +2,6 @@ from bottle import Bottle, run, abort, request, redirect, static_file
 from json import dumps
 from bowerpkg import BowerPkg
 
-from gevent import monkey
-monkey.patch_all()
 
 class BowerPkg_Server(Bottle):
     def default_error_handler(self, res):
@@ -39,4 +37,5 @@ def process_bower_json():
 def get_store(path):
     return static_file(path, root='/store')
 
-run(app, host='0.0.0.0', port=3000, server='gevent')
+if __name__ == '__main__':
+    run(app, port=3000)

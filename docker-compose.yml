@@ -1,7 +1,7 @@
 store:
   image: busybox
   volumes:
-    - '/store'
+    - '/srv/bowerpkg/store:/store'
 
 app:
   build: .

@@ -3,7 +3,7 @@ store:
   volumes:
     - '/srv/bowerpkg/store:/store'
 
-app:
+server:
   build: .
   volumes_from:
     - store

@@ -53,8 +53,11 @@ CMD env
         fileobj = BytesIO(dockerfile.encode('utf-8'))
         build = self.client.build(fileobj=fileobj, rm=True, tag=tag)
         for line in build:
-            out = loads(line)['stream']
-            sys.stdout.write(out.encode('utf-8'))
+            try:
+                out = loads(line)['stream']
+                sys.stdout.write(out.encode('utf-8'))
+            except:
+                print line.encode('utf-8')
 
     def mkdirs(self, path):
         try:

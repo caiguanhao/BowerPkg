@@ -42,4 +42,11 @@ RUN curl <BowerPkg-Address>/pkg \
     -Ls | tar xfvz -
 ```
 
+USAGE
+-----
+
+Run `docker-compose up -d` to start the service.
+Note: Once the service has been started,
+a new image called `bower` will be built automatically.
+
 LICENSE: MIT
